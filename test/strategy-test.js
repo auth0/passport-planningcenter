@@ -30,10 +30,9 @@ vows.describe('planningcenterStrategy').addBatch({
       
       // mock
       strategy._oauth.get = function(url, token, tokenSecret, callback) {
-        var body = '{"user":{"avatar":"http://www.fitbit.com/images/profile/defaultProfile_100_male.gif","city":"Oakland","country":"US","dateOfBirth":"1981-02-05","displayName":"Jared H.","encodedId":"22B7NF","fullName":"Jared Hanson","gender":"MALE","height":193.10000000000002,"offsetFromUTCMillis":-25200000,"state":"CA","strideLengthRunning":0,"strideLengthWalking":0,"timezone":"America/Los_Angeles","weight":79.38}}';
-        
+        var body = JSON.stringify({"id": "4860901","account_center_id": "5062683","first_name": "Central","last_name": "Test","photo_thumbnail_url": "https://www.planningcenteronline.com/photos/thumbnail/missing.png","name": "Central Test"});
         callback(null, body, undefined);
-      }
+      };
       
       return strategy;
     },
@@ -55,8 +54,9 @@ vows.describe('planningcenterStrategy').addBatch({
       },
       'should load profile' : function(err, profile) {
         assert.equal(profile.provider, 'planningcenter');
-        assert.equal(profile.id, '22B7NF');
-        assert.equal(profile.displayName, 'Jared H.');
+        assert.equal(profile.id, '4860901');
+        assert.equal(profile._json.id, '4860901');
+        assert.equal(profile._json.first_name, 'Central');
       },
       'should set raw property' : function(err, profile) {
         assert.isString(profile._raw);
